@@ -30,7 +30,8 @@ class OpenAICacheTestCase(APITestCase):
     def test_suggest_budget_cached(self, mock_create):
         # Mock the low-level OpenAI method; _chat caching should prevent multiple calls
         content_json = (
-            '{"monthly_income": 1000, "allocations": [], ' '"notes": "ok"}'
+            '{"monthly_income": 1000, "allocations": [], '
+            '"notes": "ok"}'
         )
         mock_create.return_value = type(
             "obj",

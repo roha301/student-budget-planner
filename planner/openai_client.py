@@ -141,7 +141,7 @@ class OpenAIClient:
             system = (
                 "You are a helpful financial assistant for a single student's data. Use the "
                 "provided context (spending summaries, budgets) and answer the user's "
-                'natural language question. Reply in JSON: {"answer": string, "followup": string}'
+                "natural language question. Reply in JSON: {\"answer\": string, \"followup\": string}"
             )
             user = (
                 f"Context:\n{context}\n\nQuestion: {query}\nRespond in JSON."
