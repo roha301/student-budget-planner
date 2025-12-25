@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<main class="glass-card dashboard">
+  <h2>Budget Dashboard</h2>
+  <div id="summary">
+    <p>Loading summary…</p>
+  </div>
+  <div class="actions">
+    <button id="suggest">Suggest Budget</button>
+    <button id="forecast">Forecast</button>
+  </div>
+  <pre id="ai-output"></pre>
+</main>
+<script src="/static/js/dashboard.js"></script>
+{% endblock %}

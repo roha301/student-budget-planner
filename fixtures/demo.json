@@ -1,0 +1,40 @@
+[
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "username": "demo",
+      "email": "demo@example.com",
+      "password": "pbkdf2_sha256$260000$demo$demohashplaceholder"
+    }
+  },
+  {
+    "model": "planner.category",
+    "pk": 1,
+    "fields": {
+      "name": "Food",
+      "user": 1
+    }
+  },
+  {
+    "model": "planner.budget",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "name": "Monthly Basic",
+      "amount": "3000.00",
+      "start_date": "2025-01-01"
+    }
+  },
+  {
+    "model": "planner.expense",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "category": 1,
+      "amount": "5.50",
+      "description": "Coffee",
+      "exp_date": "2025-12-01"
+    }
+  }
+]

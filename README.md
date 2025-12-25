@@ -43,5 +43,30 @@ Database setup (example)
 Next steps
 - Run migrations: `python manage.py migrate`
 - Create a superuser: `python manage.py createsuperuser`
-- Obtain an API token (DRF Token auth): POST username/password to `/api/auth/token/` to receive a token for Authorization: Token <key>
-- Implement OpenAI utilities and build responsive frontend.
+- Obtain an API token (DRF Token auth): POST username/password to `/api/auth/token/` to receive a token for `Authorization: Token <key>`
+
+AI Endpoints (authenticated)
+- POST `/api/ai/suggest-budget/` -> { months_of_history: 3 }
+- POST `/api/ai/forecast/` -> { months: 3 }
+- POST `/api/ai/query/` -> { query: 'How much did I spend on food?' }
+
+GitLab integration
+1. Create a project on GitLab (or use your existing project ID `77321095`).
+2. Add repository remote and push the branch `complete/finish-all` when ready:
+   - git remote add origin git@gitlab.com:<your-namespace>/<repo>.git
+   - git branch -M main
+   - git push -u origin main
+   - git push origin complete/finish-all
+3. In GitLab, add CI/CD variables (Settings → CI / CD → Variables):
+   - OPENAI_API_KEY (masked)
+   - OPENAI_MODEL (optional)
+   - TEST_SQLITE = True
+   - If publishing Docker images: CI_REGISTRY, CI_REGISTRY_IMAGE will be set by GitLab automatically
+
+Local testing tips
+- To run tests using sqlite (avoiding Oracle dependency) set `TEST_SQLITE=True` env var before running tests or in CI.
+- Example: `TEST_SQLITE=True python manage.py test`
+
+Dev tips
+- Use `localStorage` key `token` to store API token for the demo dashboard (see `static/js/dashboard.js`).
+- Configure `OPENAI_API_KEY` and optional `OPENAI_MODEL` in `.env` to enable AI features.

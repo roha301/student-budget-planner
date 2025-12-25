@@ -1,0 +1,57 @@
+stages:
+  - test
+  - lint
+  - build
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  TEST_SQLITE: 'True'
+
+cache:
+  paths:
+    - .cache/pip
+
+.test_template: &test_template
+  image: python:3.11
+  before_script:
+    - python -m venv .venv
+    - . .venv/bin/activate
+    - pip install -r requirements.txt
+  script:
+    - python manage.py test --verbosity=2
+
+unit_tests:
+  <<: *test_template
+  stage: test
+
+lint:
+  image: python:3.11
+  stage: lint
+  before_script:
+    - python -m venv .venv
+    - . .venv/bin/activate
+    - pip install black isort flake8
+  script:
+    - black --check .
+    - isort --check .
+    - flake8
+
+build_image:
+  image: docker:24
+  services:
+    - docker:dind
+  stage: build
+  variables:
+    DOCKER_DRIVER: overlay2
+  script:
+    - docker build -t ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA} .
+    - |
+      if [ -n "$CI_REGISTRY" ] && [ -n "$CI_REGISTRY_IMAGE" ] && [ -n "$CI_JOB_TOKEN" ]; then
+        echo "Pushing image to registry..."
+        echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token --password-stdin $CI_REGISTRY
+        docker push ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}
+      else
+        echo "Registry not configured; skipping push"
+      fi
+  only:
+    - main

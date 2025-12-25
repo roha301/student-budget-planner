@@ -33,8 +33,39 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
-    )
+    ),
+    'DEFAULT_THROTTLE_CLASSES': (
+        'rest_framework.throttling.UserRateThrottle',
+        'rest_framework.throttling.AnonRateThrottle',
+    ),
+    'DEFAULT_THROTTLE_RATES': {
+        'user': '200/min',
+        'anon': '20/min',
+        'ai': '10/min'
+    }
 }
+
+# Caching (use REDIS if provided, otherwise in-memory)
+REDIS_URL = env('REDIS_URL', default='')
+if REDIS_URL:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django_redis.cache.RedisCache',
+            'LOCATION': REDIS_URL,
+            'OPTIONS': {
+                'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            }
+        }
+    }
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        }
+    }
+
+# OpenAI cache timeout
+OPENAI_CACHE_SECONDS = int(env('OPENAI_CACHE_SECONDS', default=3600))
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -66,15 +97,23 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'student_budget.wsgi.application'
 
-# Database (Oracle example)
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.oracle',
-        'NAME': env('ORACLE_DSN', default='//localhost:1521/XE'),
-        'USER': env('ORACLE_USER', default='system'),
-        'PASSWORD': env('ORACLE_PASSWORD', default='oracle'),
+# Database (Oracle example). For CI / local tests you can set TEST_SQLITE=True to use sqlite in-memory.
+if env.bool('TEST_SQLITE', default=False):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': ':memory:',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.oracle',
+            'NAME': env('ORACLE_DSN', default='//localhost:1521/XE'),
+            'USER': env('ORACLE_USER', default='system'),
+            'PASSWORD': env('ORACLE_PASSWORD', default='oracle'),
+        }
+    }
 
 # Static files
 STATIC_URL = '/static/'

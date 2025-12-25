@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<main class="glass-card">
+  <h2>Transactions</h2>
+  <form id="add-expense">
+    <input name="amount" placeholder="Amount" required type="number" step="0.01" />
+    <input name="description" placeholder="Description" />
+    <input name="date" type="date" />
+    <button>Add</button>
+  </form>
+  <div id="list"></div>
+  <canvas id="chart" width="400" height="200"></canvas>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/static/js/expenses.js"></script>
+{% endblock %}

@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Student Expense Planner</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="bg">
+  <header style="position:fixed; top:1rem; left:1rem;">
+    <a href="/">Home</a> | <a href="/dashboard/">Dashboard</a>
+  </header>
+  <div style="padding-top:4rem; display:flex; align-items:center; justify-content:center;">
+    {% block content %}{% endblock %}
+  </div>
+</body>
+</html>
