@@ -1,7 +1,9 @@
 from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
+
 from .models import Budget, Category
 from .serializers import BudgetSerializer, CategorySerializer
-from rest_framework.permissions import IsAuthenticated
+
 
 class CategoryListCreateView(generics.ListCreateAPIView):
     serializer_class = CategorySerializer
@@ -12,6 +14,7 @@ class CategoryListCreateView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
 
 class BudgetListCreateView(generics.ListCreateAPIView):
     serializer_class = BudgetSerializer
