@@ -29,6 +29,6 @@ jobs:
         run: |
           . .venv/bin/activate
           pip install black isort flake8
-          black --check .
-          isort --check .
-          flake8
+          black --check . --exclude '.venv'
+          isort --check . --skip .venv
+          flake8 --exclude .venv
